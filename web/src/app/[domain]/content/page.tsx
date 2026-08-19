@@ -29,7 +29,7 @@ export default async function ContentPage(props: { params: Promise<{ domain: str
         </div>
       </div>
 
-      <KanbanBoard />
+      <KanbanBoard domain={domain} />
     </div>
   );
 }

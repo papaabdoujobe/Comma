@@ -14,6 +14,11 @@ export async function proxy(req: NextRequest) {
   // Update user's auth session
   let response = await updateSession(req)
 
+  // If the session update issued a redirect (e.g. to /login), return it immediately
+  if (response.headers.get('location')) {
+    return response
+  }
+
   // Extract the subdomain or custom domain
   const currentHost =
     process.env.NODE_ENV === 'production' && process.env.VERCEL === '1'
@@ -32,10 +37,6 @@ export async function proxy(req: NextRequest) {
     return response
   }
 
-  // Rewrite everything else to the `/[domain]` dynamic route
-  // For example: agency.wedreaminpixels.com -> /[domain]/dashboard
-  // report.theirdomain.com -> /[domain]/dashboard
-  
   // Exclude public files and Next.js internal routes
   if (
     url.pathname.startsWith('/_next') ||

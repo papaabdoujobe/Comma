@@ -38,9 +38,38 @@ const defaultTasks: ContentTask[] = [
   { id: '4', title: 'Next.js App Router vs Pages', keyword: 'nextjs app router', status: 'Research', cms: 'Framer' },
 ];
 
-export function KanbanBoard() {
+export function KanbanBoard({ domain = 'example.com' }: { domain?: string }) {
   const [tasks, setTasks] = useState<ContentTask[]>(defaultTasks);
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [isExtracting, setIsExtracting] = useState(false);
+
+  const handleExtract = async () => {
+    setIsExtracting(true);
+    try {
+      const res = await fetch('/api/crawl', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: domain }),
+      });
+      const data = await res.json();
+      
+      if (data.success && data.pages) {
+        const newTasks: ContentTask[] = data.pages.map((pageUrl: string, index: number) => ({
+          id: `extracted-${index}`,
+          title: new URL(pageUrl).pathname || 'Home',
+          keyword: 'Assign Keyword...',
+          status: 'Research',
+          cms: 'WordPress',
+        }));
+        
+        setTasks((prev) => [...newTasks, ...prev]);
+      }
+    } catch (err) {
+      console.error('Extraction failed', err);
+    } finally {
+      setIsExtracting(false);
+    }
+  };
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -135,6 +164,12 @@ export function KanbanBoard() {
 
   const activeTask = tasks.find((task) => task.id === activeId);
 
+  const handleUpdateTask = (id: string, updates: Partial<ContentTask>) => {
+    setTasks((prev) => 
+      prev.map(task => task.id === id ? { ...task, ...updates } : task)
+    );
+  };
+
   return (
     <DndContext
       sensors={sensors}
@@ -142,14 +177,29 @@ export function KanbanBoard() {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
+      <div className="mb-6 flex justify-end">
+        <button 
+          onClick={handleExtract}
+          disabled={isExtracting}
+          className="bg-primary text-primary-foreground px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors shadow-sm disabled:opacity-50"
+        >
+          {isExtracting ? 'Extracting Pages...' : 'Auto-Extract Site Pages'}
+        </button>
+      </div>
       <div className="flex gap-6 overflow-x-auto w-full min-h-[500px]">
         {columns.map((col) => (
-          <KanbanColumn key={col} id={col} title={col} tasks={tasks.filter((task) => task.status === col)} />
+          <KanbanColumn 
+            key={col} 
+            id={col} 
+            title={col} 
+            tasks={tasks.filter((task) => task.status === col)}
+            onUpdateTask={handleUpdateTask} 
+          />
         ))}
       </div>
 
       <DragOverlay>
-        {activeTask ? <KanbanItem task={activeTask} /> : null}
+        {activeTask ? <KanbanItem task={activeTask} onUpdateTask={handleUpdateTask} /> : null}
       </DragOverlay>
     </DndContext>
   );

@@ -1,17 +1,32 @@
 "use client"
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import type { ContentTask } from './kanban-board';
 import { FileText, MoreHorizontal } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
 
 interface KanbanItemProps {
   task: ContentTask;
+  onUpdateTask: (id: string, updates: Partial<ContentTask>) => void;
 }
 
-export function KanbanItem({ task }: KanbanItemProps) {
+export function KanbanItem({ task, onUpdateTask }: KanbanItemProps) {
+  const [keyword, setKeyword] = useState(task.keyword);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   const {
     setNodeRef,
     attributes,
@@ -51,31 +66,63 @@ export function KanbanItem({ task }: KanbanItemProps) {
     }
   }
 
+  const handleSave = () => {
+    onUpdateTask(task.id, { keyword });
+    setIsDialogOpen(false);
+  };
+
   return (
-    <Card
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-      {...listeners}
-      className="rounded-xl border-none shadow-sm cursor-grab active:cursor-grabbing hover:shadow-md transition-shadow relative bg-white group"
-    >
-      <CardContent className="p-4">
-        <div className="flex justify-between items-start mb-2">
-          <span className={`text-[10px] uppercase font-bold tracking-wider px-2 py-1 rounded-md ${getCmsColor(task.cms)}`}>
-            {task.cms}
-          </span>
-          <button className="text-gray-300 hover:text-gray-500 transition-colors opacity-0 group-hover:opacity-100">
-            <MoreHorizontal className="w-4 h-4" />
-          </button>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      <Card
+        ref={setNodeRef}
+        style={style}
+        {...attributes}
+        {...listeners}
+        className="rounded-xl border-none shadow-sm cursor-grab active:cursor-grabbing hover:shadow-md transition-shadow relative bg-white group"
+      >
+        <CardContent className="p-4">
+          <div className="flex justify-between items-start mb-2">
+            <span className={`text-[10px] uppercase font-bold tracking-wider px-2 py-1 rounded-md ${getCmsColor(task.cms)}`}>
+              {task.cms}
+            </span>
+            <DialogTrigger asChild>
+              <button 
+                onPointerDown={(e) => e.stopPropagation()} 
+                className="text-gray-300 hover:text-gray-500 transition-colors opacity-0 group-hover:opacity-100"
+              >
+                <MoreHorizontal className="w-4 h-4" />
+              </button>
+            </DialogTrigger>
+          </div>
+          <h4 className="font-semibold text-gray-900 text-sm leading-snug mb-3 line-clamp-2">
+            {task.title}
+          </h4>
+          <div className="flex items-center gap-2 text-xs font-medium text-gray-500">
+            <FileText className="w-3 h-3 text-gray-400" />
+            <span className="truncate">{task.keyword}</span>
+          </div>
+        </CardContent>
+      </Card>
+
+      <DialogContent onPointerDownOutside={(e) => e.preventDefault()}>
+        <DialogHeader>
+          <DialogTitle>Assign Keyword</DialogTitle>
+          <DialogDescription>
+            Assign a focus keyword for this page. Our AI will grade your content against it.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="py-4">
+          <Input 
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            placeholder="e.g. best seo tools"
+          />
         </div>
-        <h4 className="font-semibold text-gray-900 text-sm leading-snug mb-3">
-          {task.title}
-        </h4>
-        <div className="flex items-center gap-2 text-xs font-medium text-gray-500">
-          <FileText className="w-3 h-3 text-gray-400" />
-          <span>{task.keyword}</span>
-        </div>
-      </CardContent>
-    </Card>
+        <DialogFooter>
+          <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
+          <Button onClick={handleSave}>Save Keyword</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
