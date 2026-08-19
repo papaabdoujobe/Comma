@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Comma Dashboard</title>
+<!-- Tailwind CSS with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- FontAwesome for Icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Config for specific colors and fonts -->
+<script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#2563eb', // Approximate blue from mockup
+                        success: '#22c55e', // Green for stats
+                        bgLight: '#f0f2f5', // Main background
+                        textDark: '#1f2937', // Dark gray text
+                        textGray: '#6b7280', // Light gray text
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                    }
+                }
+            }
+        }
+    </script>
+<style data-purpose="custom-utilities">
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+
+        /* Specific active state styling for sidebar link */
+        .sidebar-link.active {
+            color: #2563eb;
+            font-weight: 500;
+            background: linear-gradient(to right, rgba(37, 99, 235, 0.05), transparent);
+        }
+        .sidebar-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 24px;
+            width: 4px;
+            background-color: #2563eb;
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-bgLight font-sans text-textDark h-screen flex overflow-hidden">
+<!-- BEGIN: Sidebar -->
+<aside class="w-64 bg-white h-full flex flex-col shadow-sm z-20 flex-shrink-0" data-purpose="sidebar-navigation">
+<!-- Sidebar Header -->
+<div class="h-16 flex items-center px-8 mt-2">
+<h1 class="text-2xl font-bold tracking-tight text-gray-900">Comma</h1>
+</div>
+<!-- Navigation Links -->
+<nav class="flex-1 px-4 py-4 space-y-1">
+<!-- Active Link: Dashboard -->
+<a class="sidebar-link active relative group flex items-center px-4 py-3 text-sm font-medium rounded-md transition-colors border-l-4 border-blue-600 text-blue-600 bg-blue-50 rounded-r-md" href="#">
+<i class="fa-solid fa-house w-5 h-5 mr-3 text-center"></i>
+                Dashboard
+            </a>
+<a class="sidebar-link text-gray-500 hover:text-gray-900 hover:bg-gray-50 group flex items-center px-4 py-3 text-sm font-medium rounded-md transition-colors" href="#">
+<i class="fa-regular fa-file-lines w-5 h-5 mr-3 text-center"></i>
+                Content
+            </a>
+<a class="sidebar-link text-gray-500 hover:text-gray-900 hover:bg-gray-50 group flex items-center px-4 py-3 text-sm font-medium rounded-md transition-colors" href="#">
+<i class="fa-solid fa-magnifying-glass w-5 h-5 mr-3 text-center"></i>
+                SEO
+            </a>
+<a class="sidebar-link text-gray-500 hover:text-gray-900 hover:bg-gray-50 group flex items-center px-4 py-3 text-sm font-medium rounded-md transition-colors" href="#">
+<i class="fa-solid fa-user-group w-5 h-5 mr-3 text-center"></i>
+                Social
+            </a>
+<a class="sidebar-link text-gray-500 hover:text-gray-900 hover:bg-gray-50 group flex items-center px-4 py-3 text-sm font-medium rounded-md transition-colors" href="#">
+<i class="fa-solid fa-chart-line w-5 h-5 mr-3 text-center"></i>
+                Analytics
+            </a>
+</nav>
+<!-- Sidebar Footer: Settings -->
+<div class="p-4 mb-4">
+<a class="sidebar-link text-gray-500 hover:text-gray-900 hover:bg-gray-50 group flex items-center px-4 py-3 text-sm font-medium rounded-md transition-colors" href="#">
+<i class="fa-solid fa-gear w-5 h-5 mr-3 text-center"></i>
+                Settings
+            </a>
+</div>
+</aside>
+<!-- END: Sidebar -->
+<!-- BEGIN: Main Content Area -->
+<main class="flex-1 flex flex-col min-w-0 bg-[#eef1f6]">
+<!-- BEGIN: Top Header -->
+<header class="h-16 bg-[#eef1f6] flex items-center justify-between px-8" data-purpose="top-header">
+<!-- Left: Toggle & Brand (Visible on mobile mostly, but implied layout) -->
+<div class="flex items-center">
+<button class="mr-4 text-gray-500 hover:text-gray-700 lg:hidden">
+<i class="fa-solid fa-bars text-xl"></i>
+</button>
+<div class="hidden lg:flex items-center text-gray-800 font-bold mr-8">
+<i class="fa-solid fa-database mr-2"></i> Comma
+                </div>
+<!-- Top Search -->
+<div class="relative hidden md:block">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<i class="fa-solid fa-magnifying-glass text-gray-400 text-sm"></i>
+</div>
+<input class="block w-64 pl-10 pr-3 py-2 border-none rounded-lg leading-5 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-0 sm:text-sm shadow-sm" placeholder="Search" type="text"/>
+</div>
+</div>
+<!-- Right: Actions & Profile -->
+<div class="flex items-center space-x-4">
+<button class="p-2 bg-white rounded-lg text-gray-500 hover:text-gray-700 shadow-sm focus:outline-none">
+<i class="fa-regular fa-bell"></i>
+</button>
+<div class="relative">
+<img alt="User Profile" class="h-10 w-10 rounded-full border border-gray-200 shadow-sm object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBV5jzSf8x3GehKPiG97wYmrm66ajafBI_rBGkXIMt63eqgAFMX9kN0k3WZKxRadEkfzTUXUumF5H2mLA7NyyCK-Oj14TyCdyYbnpzMoFupkF-byRkgzl37-Bzl4RTpGgLuf1ojwTcfh4XbwqonRHgobvlv7Y4znd8_JFGfIVa-ZsSHBhwBdBI-5V5oARhjzADGP5hK_dZf7gKH3RyifbUmDhKG-BgqV8IMnzVutctCMNeuf53owD94fq4ky0hniTOI6cbb8_p1r7A"/>
+</div>
+</div>
+</header>
+<!-- END: Top Header -->
+<!-- BEGIN: Scrollable Dashboard Content -->
+<div class="flex-1 overflow-y-auto px-8 py-6">
+<!-- Dashboard Title & Secondary Search -->
+<div class="mb-8">
+<h2 class="text-2xl font-bold text-gray-900 mb-6">Dashboard</h2>
+<!-- Wide Search Bar -->
+<div class="relative w-full">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<i class="fa-solid fa-magnifying-glass text-gray-400"></i>
+</div>
+<input class="block w-full pl-11 pr-4 py-3 border-none rounded-xl bg-white shadow-soft text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-primary focus:ring-opacity-50 transition-shadow" placeholder="Search" type="text"/>
+</div>
+</div>
+<!-- BEGIN: Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8" data-purpose="statistics-cards">
+<!-- Card 1 -->
+<div class="bg-white rounded-2xl p-6 shadow-soft flex flex-col justify-between h-32 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg">
+<h3 class="text-sm font-medium text-gray-500">Organic Traffic</h3>
+<div>
+<div class="text-2xl font-bold text-gray-900">12,345</div>
+<div class="text-sm font-medium text-green-500 mt-1">+10%</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-white rounded-2xl p-6 shadow-soft flex flex-col justify-between h-32 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg">
+<h3 class="text-sm font-medium text-gray-500">Domain Authority</h3>
+<div>
+<div class="text-2xl font-bold text-gray-900">65</div>
+<div class="text-sm font-medium text-green-500 mt-1">+5%</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-white rounded-2xl p-6 shadow-soft flex flex-col justify-between h-32 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg">
+<h3 class="text-sm font-medium text-gray-500">Backlinks</h3>
+<div>
+<div class="text-2xl font-bold text-gray-900">2,500</div>
+<div class="text-sm font-medium text-green-500 mt-1">+15%</div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-white rounded-2xl p-6 shadow-soft flex flex-col justify-between h-32 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg">
+<h3 class="text-sm font-medium text-gray-500">Conversions</h3>
+<div>
+<div class="text-2xl font-bold text-gray-900">500</div>
+<div class="text-sm font-medium text-green-500 mt-1">+8%</div>
+</div>
+</div></div>
+<!-- END: Stats Grid -->
+<!-- BEGIN: Traffic Trends Chart -->
+<div class="mb-8" data-purpose="chart-section">
+<h3 class="text-lg font-bold text-gray-800 mb-4">Traffic Trends</h3>
+<div class="bg-white rounded-2xl p-6 shadow-soft w-full overflow-hidden">
+<!-- Chart Header inside card -->
+<div class="mb-4">
+<div class="text-sm text-gray-500">Website Traffic</div>
+<div class="flex items-baseline space-x-2">
+<span class="text-3xl font-bold text-gray-900">12,345</span>
+<span class="text-sm font-medium text-success">Last 30 Days +10%</span>
+</div>
+</div>
+<!-- Chart Placeholder: Using a div to simulate chart container -->
+<img alt="Traffic Trends Area Chart" class="w-full h-auto rounded-lg object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKtXN-unKXFr5SB8UT77k3WRi7Ar6IfBSZnDzPCkiJlFJr7XAVBoflMAWJMAbKz2CJINpI4JgGayGshpoRvY3gqZFW2PTn1hfLzHK0BBSWWC6M0Ccv5j8FnUSS0fN1zTQi5dnkY28b74R1lr4742kUWEkI5drVdgcBFrk74uYMP0iF7_BiueOgyI3_m0fAAD3Ab-sAjYF4SmLkj7kTlPfXOP90GSXJKRGsZDhzcCNL3ImeISIx-Hk84nOmw177fiij-ESngIx-hUM" style="width: 100%; height: auto;"/>
+<!-- X-Axis Labels (Simulated) -->
+<div class="flex justify-between text-xs text-gray-400 mt-4 px-4">
+<span>Jan</span>
+<span>Feb</span>
+<span>Mar</span>
+<span>Apr</span>
+<span>May</span>
+<span>Jun</span>
+<span>Jul</span>
+</div>
+</div>
+</div>
+<!-- END: Traffic Trends Chart -->
+<!-- BEGIN: Recent Tasks -->
+<div data-purpose="recent-tasks-list"><h3 class="text-lg font-bold text-gray-800 mb-4">Recent Tasks</h3>
+<div class="bg-white rounded-2xl shadow-soft p-6">
+<!-- Task 1 -->
+<div class="flex flex-col md:flex-row md:items-center justify-between py-4 border-b border-gray-100 last:border-0">
+<div class="flex flex-col mb-2 md:mb-0">
+<h4 class="font-semibold text-[#333333] text-sm">Draft Blog Post</h4>
+<p class="text-[0.85rem] text-[#888888]">Content Creation</p>
+</div>
+<div class="flex items-center justify-end gap-4">
+<span class="bg-[#e3f2fd] text-[#1976d2] px-3 py-1 rounded-full text-[0.8rem] font-medium">Content Creation</span>
+<span class="text-xs text-gray-400">2d ago</span>
+</div>
+</div>
+<!-- Task 2 -->
+<div class="flex flex-col md:flex-row md:items-center justify-between py-4 border-b border-gray-100 last:border-0">
+<div class="flex flex-col mb-2 md:mb-0">
+<h4 class="font-semibold text-[#333333] text-sm">Optimize Landing Page</h4>
+<p class="text-[0.85rem] text-[#888888]">SEO Optimization</p>
+</div>
+<div class="flex items-center justify-end gap-4">
+<span class="bg-[#e3f2fd] text-[#1976d2] px-3 py-1 rounded-full text-[0.8rem] font-medium">SEO Optimization</span>
+<span class="text-xs text-gray-400">3d ago</span>
+</div>
+</div>
+<!-- Task 3 -->
+<div class="flex flex-col md:flex-row md:items-center justify-between py-4 border-b border-gray-100 last:border-0">
+<div class="flex flex-col mb-2 md:mb-0">
+<h4 class="font-semibold text-[#333333] text-sm">Schedule Posts</h4>
+<p class="text-[0.85rem] text-[#888888]">Social Media</p>
+</div>
+<div class="flex items-center justify-end gap-4">
+<span class="bg-[#e3f2fd] text-[#1976d2] px-3 py-1 rounded-full text-[0.8rem] font-medium">Social Media</span>
+<span class="text-xs text-gray-400">4d ago</span>
+</div>
+</div>
+<!-- Task 4 -->
+<div class="flex flex-col md:flex-row md:items-center justify-between py-4 border-b border-gray-100 last:border-0">
+<div class="flex flex-col mb-2 md:mb-0">
+<h4 class="font-semibold text-[#333333] text-sm">Review Performance</h4>
+<p class="text-[0.85rem] text-[#888888]">Analytics</p>
+</div>
+<div class="flex items-center justify-end gap-4">
+<span class="bg-[#e3f2fd] text-[#1976d2] px-3 py-1 rounded-full text-[0.8rem] font-medium">Analytics</span>
+<span class="text-xs text-gray-400">5d ago</span>
+</div>
+</div>
+</div></div>
+<!-- END: Recent Tasks -->
+<!-- Bottom spacing -->
+<div class="h-8"></div>
+</div>
+<!-- END: Scrollable Dashboard Content -->
+</main>
+<!-- END: Main Content Area -->
+<!-- Chart Rendering Script (To simulate the visual provided in the prompt without external images) -->
+</body></html><!-- MISSING_IMAGES:
+- User Profile Avatar (https://placehold.co/40x40) used in header.
+-->

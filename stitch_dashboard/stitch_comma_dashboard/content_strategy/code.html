@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Content Strategy - Comma SEO</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Outfit:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0055ff",
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#0f1623",
+                        "glass-border": "rgba(255, 255, 255, 0.2)",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "heading": ["Outfit", "sans-serif"],
+                    },
+                    boxShadow: {
+                        'premium': '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0,0,0,0.02)',
+                        'inner-glow': 'inset 0 0 0 1px rgba(255, 255, 255, 0.5)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .glassmorphic-sidebar {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-right: 1px solid rgba(229, 231, 235, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#0c121d] font-display overflow-hidden antialiased">
+<div class="flex h-screen w-full">
+<!-- Sidebar -->
+<aside class="glassmorphic-sidebar fixed left-0 top-0 z-20 flex h-full w-[220px] flex-col justify-between p-4 shadow-sm">
+<div class="flex flex-col gap-8">
+<div class="flex items-center gap-2 px-2">
+<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-white">
+<span class="material-symbols-outlined text-xl">shape_line</span>
+</div>
+<div>
+<h1 class="font-heading text-lg font-bold leading-none text-[#0c121d]">Comma</h1>
+<p class="text-xs font-medium text-slate-500">SEO Portal</p>
+</div>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-slate-600 transition-colors hover:bg-slate-50 hover:text-[#0c121d]" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="text-sm font-medium">Overview</span>
+</a>
+<a class="flex items-center gap-3 rounded-lg bg-primary/10 px-3 py-2.5 text-primary shadow-sm ring-1 ring-primary/10" href="#">
+<span class="material-symbols-outlined text-[20px] fill-1">view_kanban</span>
+<span class="text-sm font-semibold">Strategy</span>
+</a>
+<a class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-slate-600 transition-colors hover:bg-slate-50 hover:text-[#0c121d]" href="#">
+<span class="material-symbols-outlined text-[20px]">key</span>
+<span class="text-sm font-medium">Keywords</span>
+</a>
+<a class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-slate-600 transition-colors hover:bg-slate-50 hover:text-[#0c121d]" href="#">
+<span class="material-symbols-outlined text-[20px]">group</span>
+<span class="text-sm font-medium">Team</span>
+</a>
+<a class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-slate-600 transition-colors hover:bg-slate-50 hover:text-[#0c121d]" href="#">
+<span class="material-symbols-outlined text-[20px]">analytics</span>
+<span class="text-sm font-medium">Analytics</span>
+</a>
+</nav>
+</div>
+<div class="flex flex-col gap-2 border-t border-slate-100 pt-4">
+<a class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-slate-600 transition-colors hover:bg-slate-50 hover:text-[#0c121d]" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+<div class="mt-2 flex items-center gap-3 rounded-xl bg-slate-50 p-2">
+<img class="h-8 w-8 rounded-full border border-white shadow-sm object-cover" data-alt="User Avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuChhqZ5gqg_zaCRAt3MNWWNpR4SbPkYx09BpT7RZdtrZ6PUsVuYMTM7xH6Od3hpxDnfIza8TqVp50KiXRyEcGR5GOVE6_xlAB6VIcCAlp_hVSvmlxt8JuDFHzs_GzD3A_umpMNXeAo_1ct6L2R2Ph5Y9VgyKtahOBbNNYTqXbwziu4D7omB5DwKbkJl-o1XKZ1dFnFtd3QvnD6wgjygNW865WXO3WrjgvRSxVZxk_5XEes86oBjfhhcOYKHmjd25k6h5Nt_d-rJ62M"/>
+<div class="flex flex-col">
+<p class="text-xs font-semibold text-[#0c121d]">Alex M.</p>
+<p class="text-[10px] text-slate-500">Editor in Chief</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="ml-[220px] flex h-full flex-1 flex-col overflow-hidden bg-[#fafafa]">
+<!-- Header -->
+<header class="flex h-20 shrink-0 items-center justify-between border-b border-slate-100 bg-white px-8 py-4">
+<div class="flex items-center gap-4">
+<h2 class="font-heading text-2xl font-bold tracking-tight text-[#0c121d]">Content Strategy</h2>
+<div class="h-6 w-[1px] bg-slate-200"></div>
+<div class="flex items-center gap-2 rounded-lg bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-600 ring-1 ring-slate-200">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+<span>Oct 2023</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-2.5 top-2 text-[20px] text-slate-400">search</span>
+<input class="h-9 w-64 rounded-lg border-none bg-slate-50 pl-9 text-sm text-slate-600 placeholder-slate-400 shadow-sm ring-1 ring-slate-200 focus:ring-2 focus:ring-primary/50" placeholder="Search roadmap..." type="text"/>
+</div>
+<button class="flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-bold text-white shadow-md shadow-primary/20 transition hover:bg-primary/90">
+<span class="material-symbols-outlined text-[20px]">add</span>
+<span>New Content</span>
+</button>
+</div>
+</header>
+<!-- Kanban Board -->
+<div class="flex flex-1 gap-6 overflow-x-auto p-8">
+<!-- Column 1: Keyword Research -->
+<div class="flex w-full min-w-[320px] max-w-[400px] flex-col rounded-2xl bg-[#f3f4f6] p-4">
+<div class="mb-4 flex items-center justify-between px-2">
+<h3 class="font-heading text-sm font-bold uppercase tracking-wider text-slate-500">Keyword Research</h3>
+<span class="flex h-6 w-6 items-center justify-center rounded-full bg-slate-200 text-xs font-bold text-slate-600">3</span>
+</div>
+<div class="flex flex-1 flex-col gap-4 overflow-y-auto pr-1">
+<!-- Card 1 -->
+<div class="group relative flex flex-col gap-3 rounded-[10px] border border-[#E5E7EB] bg-white p-4 shadow-premium shadow-inner-glow transition-all hover:-translate-y-1 hover:shadow-lg">
+<div class="flex items-start justify-between">
+<span class="rounded-full bg-purple-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-purple-700">Commercial</span>
+<button class="text-slate-300 hover:text-slate-500"><span class="material-symbols-outlined text-[18px]">more_horiz</span></button>
+</div>
+<h4 class="font-display text-base font-semibold leading-tight text-[#0c121d]">Best SEO Tools 2024</h4>
+<div class="mt-1 flex flex-col gap-1.5">
+<div class="flex justify-between text-[11px] font-medium text-slate-500">
+<span>Optimization</span>
+<span>20%</span>
+</div>
+<div class="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+<div class="h-full w-[20%] rounded-full bg-orange-400"></div>
+</div>
+</div>
+<div class="flex items-center justify-between border-t border-slate-50 pt-3">
+<div class="flex -space-x-2">
+<img class="h-6 w-6 rounded-full border-2 border-white object-cover" data-alt="Team member avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtJ2ph-pGHRYIkIBrJPqOm_HVh4oZtxWWlUdUuSLPuqAeTRh9lLQW_gc4JljUUjWPo1_9uxbAjY8YP1BzKkOLrSQe-DsWd1HsD4Lx_DhCYA_K-Hyxh4JQItRd5_GP0iQU6jiOxQaUMYV2QGq0pVf1-SaVH6NN2rEe-sLRi2y75tcT136J83f4PDt2Fr_hBVP0xtmjim4H5csHso89OhM07ImVRD5u8-kdmpuwv_IciN8ak36EInEeJtFxYFbiAYaZg-iITpvgW21w"/>
+</div>
+<div class="flex items-center gap-1 text-[11px] font-medium text-slate-400">
+<span class="material-symbols-outlined text-[14px]">calendar_clock</span>
+<span>Oct 24</span>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group relative flex flex-col gap-3 rounded-[10px] border border-[#E5E7EB] bg-white p-4 shadow-premium shadow-inner-glow transition-all hover:-translate-y-1 hover:shadow-lg">
+<div class="flex items-start justify-between">
+<span class="rounded-full bg-blue-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-blue-700">Informational</span>
+<button class="text-slate-300 hover:text-slate-500"><span class="material-symbols-outlined text-[18px]">more_horiz</span></button>
+</div>
+<h4 class="font-display text-base font-semibold leading-tight text-[#0c121d]">How to optimize images for web</h4>
+<div class="mt-1 flex flex-col gap-1.5">
+<div class="flex justify-between text-[11px] font-medium text-slate-500">
+<span>Optimization</span>
+<span>15%</span>
+</div>
+<div class="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+<div class="h-full w-[15%] rounded-full bg-red-400"></div>
+</div>
+</div>
+<div class="flex items-center justify-between border-t border-slate-50 pt-3">
+<div class="flex items-center justify-center h-6 w-6 rounded-full border-2 border-dashed border-slate-300 bg-slate-50 text-[10px] text-slate-400">
+<span class="material-symbols-outlined text-[14px]">add</span>
+</div>
+<div class="flex items-center gap-1 text-[11px] font-medium text-slate-400">
+<span class="material-symbols-outlined text-[14px]">calendar_clock</span>
+<span>TBD</span>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group relative flex flex-col gap-3 rounded-[10px] border border-[#E5E7EB] bg-white p-4 shadow-premium shadow-inner-glow transition-all hover:-translate-y-1 hover:shadow-lg">
+<div class="flex items-start justify-between">
+<span class="rounded-full bg-purple-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-purple-700">Commercial</span>
+<button class="text-slate-300 hover:text-slate-500"><span class="material-symbols-outlined text-[18px]">more_horiz</span></button>
+</div>
+<h4 class="font-display text-base font-semibold leading-tight text-[#0c121d]">Top 10 CRM for Startups</h4>
+<div class="mt-1 flex flex-col gap-1.5">
+<div class="flex justify-between text-[11px] font-medium text-slate-500">
+<span>Optimization</span>
+<span>5%</span>
+</div>
+<div class="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+<div class="h-full w-[5%] rounded-full bg-slate-300"></div>
+</div>
+</div>
+<div class="flex items-center justify-between border-t border-slate-50 pt-3">
+<div class="flex -space-x-2">
+<img class="h-6 w-6 rounded-full border-2 border-white object-cover" data-alt="Team member avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCU-Xu29PU2_VizXzYUKK_2CGaeMfxT_O1PCbFxN-6gUeyJQalHQjoIcNdRqGgYQakY0hb_bf-cfKz5eUp17bLP8LB-7wxL0DxsatclxLobq_1gCWQcCXZkROulVZnoANKSYH4FU3_vtt1X6aA-ujGbYcQuPLXAZ9URHhAy5EhpA13SxAEShFkTIi7dsT7PLdzTf5UAQR3IyLEa9uXPitKcRKULScv9Pg5at-uMCM0NVMEziFGj7rZX6BW9pqRzeuZk3bo5qIew-C4"/>
+</div>
+<div class="flex items-center gap-1 text-[11px] font-medium text-slate-400">
+<span class="material-symbols-outlined text-[14px]">calendar_clock</span>
+<span>Nov 02</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Column 2: Writing -->
+<div class="flex w-full min-w-[320px] max-w-[400px] flex-col rounded-2xl bg-[#f3f4f6] p-4">
+<div class="mb-4 flex items-center justify-between px-2">
+<h3 class="font-heading text-sm font-bold uppercase tracking-wider text-slate-500">Writing</h3>
+<span class="flex h-6 w-6 items-center justify-center rounded-full bg-slate-200 text-xs font-bold text-slate-600">2</span>
+</div>
+<div class="flex flex-1 flex-col gap-4 overflow-y-auto pr-1">
+<!-- Card 1 -->
+<div class="group relative flex flex-col gap-3 rounded-[10px] border border-[#E5E7EB] bg-white p-4 shadow-premium shadow-inner-glow transition-all hover:-translate-y-1 hover:shadow-lg">
+<div class="flex items-start justify-between">
+<span class="rounded-full bg-emerald-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-emerald-700">Transactional</span>
+<button class="text-slate-300 hover:text-slate-500"><span class="material-symbols-outlined text-[18px]">more_horiz</span></button>
+</div>
+<h4 class="font-display text-base font-semibold leading-tight text-[#0c121d]">SaaS Marketing Guide</h4>
+<div class="mt-1 flex flex-col gap-1.5">
+<div class="flex justify-between text-[11px] font-medium text-slate-500">
+<span>Optimization</span>
+<span class="text-primary font-semibold">65%</span>
+</div>
+<div class="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+<div class="h-full w-[65%] rounded-full bg-primary shadow-[0_0_10px_rgba(0,85,255,0.4)]"></div>
+</div>
+</div>
+<div class="flex items-center justify-between border-t border-slate-50 pt-3">
+<div class="flex -space-x-2">
+<img class="h-6 w-6 rounded-full border-2 border-white object-cover" data-alt="Team member avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDph8aUJMF5ucLruJRtrtRE-2i6HifjpVy_emBc2NxJlbhy2-5dJ_4gwegY0JSGWvwllnMUE7S7Yk2M58qDQ3o0tkNZnm2kXY-bajZd8wv5VAjwAgwKzA9Ih-N9O7Z1XPQY8TepwyAZ98rLr7TOP_qcFpu6ikZHzELMKL-YyLtaqmzmgUqGU30ZvGsjWvCRBz_iWvsGGvWHVyxp5xKkkL9nRXpq9qqmDfTzZE39vjWkVSgLii7Y2UO1RbKcY0Ef6AmqABTjwVEpcvc"/>
+</div>
+<div class="flex items-center gap-1 text-[11px] font-medium text-red-400 bg-red-50 px-2 py-0.5 rounded-md">
+<span class="material-symbols-outlined text-[14px]">warning</span>
+<span>Due Tmrw</span>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group relative flex flex-col gap-3 rounded-[10px] border border-[#E5E7EB] bg-white p-4 shadow-premium shadow-inner-glow transition-all hover:-translate-y-1 hover:shadow-lg">
+<div class="flex items-start justify-between">
+<span class="rounded-full bg-blue-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-blue-700">Informational</span>
+<button class="text-slate-300 hover:text-slate-500"><span class="material-symbols-outlined text-[18px]">more_horiz</span></button>
+</div>
+<h4 class="font-display text-base font-semibold leading-tight text-[#0c121d]">Understanding Technical SEO</h4>
+<div class="mt-1 flex flex-col gap-1.5">
+<div class="flex justify-between text-[11px] font-medium text-slate-500">
+<span>Optimization</span>
+<span class="text-primary font-semibold">42%</span>
+</div>
+<div class="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+<div class="h-full w-[42%] rounded-full bg-primary shadow-[0_0_8px_rgba(0,85,255,0.3)]"></div>
+</div>
+</div>
+<div class="flex items-center justify-between border-t border-slate-50 pt-3">
+<div class="flex -space-x-2">
+<img class="h-6 w-6 rounded-full border-2 border-white object-cover" data-alt="Team member avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBO-Bfos4EWtcQM758KKTlGxceqF38YRKAmslinYn2JG-OCXPWR2jxgrsdn8C8vahNaOE7lxH6EJHRJDxkMc4YZ2Us166-fjgYOHOJJuZtk1uuyarRU43vYFybU3p0qX7NwUeU69n78QhwSl5qM_47m9HGc9R8w2NZU7K-XDtuBuGy2tcG8T_3kUpErCbJ9i3PmpeNYo9KSNE8LPATlf7-5ww7-NV_cd7RD_tKd6gIPs3-1skVQBrTfERVswwgNQDrH-mBep42NyHY"/>
+<img class="h-6 w-6 rounded-full border-2 border-white object-cover" data-alt="Team member avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZNMqyssrGi5GI_cueg6Dj4Bweem3EKklDCiEM7cdoLHgo7mFh-XxWqatwMmWHK0wlfzMN-RRM9-n2D3ZGeFqyDRs3adXZ6WdjoHWm-xrKwOj18b37jI3F0Ke0Ri4UNAqr1By5H88xcYND1fJUt697qWuTBXpfsX24HkELibGzhQl73iqnn7V0UEgekrzW7jaTg02bOzWOQEb4OzZwpOnSpFcZnkEmw8rWtrfsb9DO121M285SaSEQrHOrVNWoMyC-aBplJ7rdzUU"/>
+</div>
+<div class="flex items-center gap-1 text-[11px] font-medium text-slate-400">
+<span class="material-symbols-outlined text-[14px]">calendar_clock</span>
+<span>Oct 29</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Column 3: Published -->
+<div class="flex w-full min-w-[320px] max-w-[400px] flex-col rounded-2xl bg-[#f3f4f6] p-4">
+<div class="mb-4 flex items-center justify-between px-2">
+<h3 class="font-heading text-sm font-bold uppercase tracking-wider text-slate-500">Published</h3>
+<span class="flex h-6 w-6 items-center justify-center rounded-full bg-slate-200 text-xs font-bold text-slate-600">3</span>
+</div>
+<div class="flex flex-1 flex-col gap-4 overflow-y-auto pr-1">
+<!-- Card 1 -->
+<div class="group relative flex flex-col gap-3 rounded-[10px] border border-[#E5E7EB] bg-white p-4 shadow-premium shadow-inner-glow transition-all hover:-translate-y-1 hover:shadow-lg opacity-75 hover:opacity-100">
+<div class="flex items-start justify-between">
+<span class="rounded-full bg-blue-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-blue-700">Informational</span>
+<div class="rounded-full bg-green-50 p-1 text-green-600">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+</div>
+<h4 class="font-display text-base font-semibold leading-tight text-[#0c121d]">Link Building Strategies</h4>
+<div class="mt-1 flex flex-col gap-1.5">
+<div class="flex justify-between text-[11px] font-medium text-slate-500">
+<span>Optimization</span>
+<span class="text-green-600 font-bold">98%</span>
+</div>
+<div class="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+<div class="h-full w-[98%] rounded-full bg-green-500"></div>
+</div>
+</div>
+<div class="flex items-center justify-between border-t border-slate-50 pt-3">
+<div class="flex -space-x-2">
+<img class="h-6 w-6 rounded-full border-2 border-white object-cover" data-alt="Team member avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcnIjG8qjlPCbYf-5OCFwyJP6HEicB6frlDqYMZstsprcA5wfJhWdej4owjpHdqfafIqaFoczoYKkIA7hp73S4R4eOZ3X8BCk8FoJ5rWBgemo-ZiU_tlSQprQHAawnWIqOtXUOSKV7JQnV5ZJU4qTq2DcLyilI5BLzTD-nOfNovhvK4f0T3BlnPb8c8CrepLpKEixgiqnwt3PEb9f1rrb5-y20-0BGflRUY3gC8HqEeC1FBfTco-ZdnxmGOW2Bavpaw-hcgp7sc20"/>
+</div>
+<div class="flex items-center gap-1 text-[11px] font-medium text-slate-400">
+<span>Published Oct 10</span>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group relative flex flex-col gap-3 rounded-[10px] border border-[#E5E7EB] bg-white p-4 shadow-premium shadow-inner-glow transition-all hover:-translate-y-1 hover:shadow-lg opacity-75 hover:opacity-100">
+<div class="flex items-start justify-between">
+<span class="rounded-full bg-emerald-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-emerald-700">Transactional</span>
+<div class="rounded-full bg-green-50 p-1 text-green-600">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+</div>
+<h4 class="font-display text-base font-semibold leading-tight text-[#0c121d]">Keyword Research 101</h4>
+<div class="mt-1 flex flex-col gap-1.5">
+<div class="flex justify-between text-[11px] font-medium text-slate-500">
+<span>Optimization</span>
+<span class="text-green-600 font-bold">92%</span>
+</div>
+<div class="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+<div class="h-full w-[92%] rounded-full bg-green-500"></div>
+</div>
+</div>
+<div class="flex items-center justify-between border-t border-slate-50 pt-3">
+<div class="flex -space-x-2">
+<img class="h-6 w-6 rounded-full border-2 border-white object-cover" data-alt="Team member avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYuhTXqcw2RWGt4znRzixMqI3yXE7Nao4pj0JA8xRwotCdf23XVpK9AttXvSMrzxgW_Bq6bdNPGBDnf0fMG1R9QBLi7VUyCppKYtGa_Iv0AdATcUFwb_Y8kzJ9B4wlZD3hnCdV3qNsiP4EYu74R5DT4MVRXpULypFRA1WDnhn8eUF7eMldGnl0E0yfHdcW-Ykco_zc0G6_7Z_VnDc5Gq7NZ9Im18hqGtXfP3m5SFcLq3EzJtcjjCSxFbTgSlJojk-ltccDmhu34E0"/>
+</div>
+<div class="flex items-center gap-1 text-[11px] font-medium text-slate-400">
+<span>Published Oct 05</span>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group relative flex flex-col gap-3 rounded-[10px] border border-[#E5E7EB] bg-white p-4 shadow-premium shadow-inner-glow transition-all hover:-translate-y-1 hover:shadow-lg opacity-75 hover:opacity-100">
+<div class="flex items-start justify-between">
+<span class="rounded-full bg-purple-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-purple-700">Commercial</span>
+<div class="rounded-full bg-green-50 p-1 text-green-600">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+</div>
+<h4 class="font-display text-base font-semibold leading-tight text-[#0c121d]">Best Analytics Tools</h4>
+<div class="mt-1 flex flex-col gap-1.5">
+<div class="flex justify-between text-[11px] font-medium text-slate-500">
+<span>Optimization</span>
+<span class="text-green-600 font-bold">88%</span>
+</div>
+<div class="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+<div class="h-full w-[88%] rounded-full bg-green-500"></div>
+</div>
+</div>
+<div class="flex items-center justify-between border-t border-slate-50 pt-3">
+<div class="flex -space-x-2">
+<img class="h-6 w-6 rounded-full border-2 border-white object-cover" data-alt="Team member avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGXxr_wpo5tXPcKUnfkyKp04fBUKyU0r4RiGg-J1zxecSZG-iHbGYCyvULvlgZN29bIgZ7cycevG2xYLArMU53qHx6-QV-yuLlEMI1YIAeS_ioM3qr6gksRGlaxa-67QwgHSW6nRy6Rma-kppGx7FBmV8dUzpKYIJrHYpvhyFOV3M4IYbcllVSoa5FTgDQUTRBwfMxqHw6YqZj01x98sVpQSx4Gmw9VwljLhIgsj_vLbRZKCz8A5NE1HoNKhcEotFGoqRJ206dLnI"/>
+</div>
+<div class="flex items-center gap-1 text-[11px] font-medium text-slate-400">
+<span>Published Sep 28</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Spacer for right padding if overflowing -->
+<div class="w-2 shrink-0"></div>
+</div>
+</main>
+</div>
+</body></html>
