@@ -42,6 +42,7 @@ export async function proxy(req: NextRequest) {
     url.pathname.startsWith('/_next') ||
     url.pathname.startsWith('/api') ||
     url.pathname.startsWith('/login') ||
+    url.pathname.startsWith('/signup') ||
     url.pathname.startsWith('/auth') ||
     url.pathname.startsWith('/onboarding') ||
     url.pathname.includes('.')

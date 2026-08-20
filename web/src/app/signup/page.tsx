@@ -1,18 +1,18 @@
-import { login } from './actions'
+import { signup } from './actions'
 import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 
-export default function LoginPage() {
+export default function SignupPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
       <Card className="w-full max-w-md shadow-sm border-slate-200">
         <form>
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold tracking-tight text-center">Welcome back</CardTitle>
+            <CardTitle className="text-2xl font-bold tracking-tight text-center">Create an account</CardTitle>
             <CardDescription className="text-center">
-              Enter your email and password to access your account
+              Enter your email and password to create an account
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -26,11 +26,11 @@ export default function LoginPage() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
-            <Button className="w-full" formAction={login}>Sign In</Button>
+            <Button className="w-full" formAction={signup}>Sign Up</Button>
             <div className="text-center text-sm text-muted-foreground mt-4">
-              Don't have an account?{' '}
-              <Link href="/signup" className="underline underline-offset-4 hover:text-primary">
-                Sign Up
+              Already have an account?{' '}
+              <Link href="/login" className="underline underline-offset-4 hover:text-primary">
+                Sign In
               </Link>
             </div>
             <div className="relative">
