@@ -21,9 +21,10 @@ import { Button } from "@/components/ui/button"
 interface KanbanItemProps {
   task: ContentTask;
   onUpdateTask: (id: string, updates: Partial<ContentTask>) => void;
+  onSelectTask?: (id: string) => void;
 }
 
-export function KanbanItem({ task, onUpdateTask }: KanbanItemProps) {
+export function KanbanItem({ task, onUpdateTask, onSelectTask }: KanbanItemProps) {
   const [keyword, setKeyword] = useState(task.keyword);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -71,6 +72,12 @@ export function KanbanItem({ task, onUpdateTask }: KanbanItemProps) {
     setIsDialogOpen(false);
   };
 
+  const handleCardClick = () => {
+    if (onSelectTask) {
+      onSelectTask(task.id);
+    }
+  };
+
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <Card
@@ -78,6 +85,7 @@ export function KanbanItem({ task, onUpdateTask }: KanbanItemProps) {
         style={style}
         {...attributes}
         {...listeners}
+        onClick={handleCardClick}
         className="rounded-xl border-none shadow-sm cursor-grab active:cursor-grabbing hover:shadow-md transition-shadow relative bg-white group"
       >
         <CardContent className="p-4">

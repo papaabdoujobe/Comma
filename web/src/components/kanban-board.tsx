@@ -14,12 +14,20 @@ import {
 } from '@dnd-kit/core';
 import {
   arrayMove,
-  SortableContext,
   sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { KanbanColumn } from './kanban-column';
 import { KanbanItem } from './kanban-item';
+import { ContentEditor } from './content-editor';
+import { SeoScoreGauge } from './seo-score-gauge';
+import { calculateSeoScore } from '@/lib/scoring';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet"
+import { Bot, Loader2 } from 'lucide-react';
 
 export type ContentStatus = "Research" | "Writing" | "Published";
 
@@ -29,19 +37,24 @@ export type ContentTask = {
   keyword: string;
   status: ContentStatus;
   cms: string;
+  htmlContent?: string;
 };
 
 const defaultTasks: ContentTask[] = [
-  { id: '1', title: 'Top 10 SEO Strategies for 2026', keyword: 'seo strategies', status: 'Research', cms: 'WordPress' },
-  { id: '2', title: 'How to use DataForSEO API', keyword: 'dataforseo tutorial', status: 'Writing', cms: 'Webflow' },
-  { id: '3', title: 'A guide to Webflow CMS', keyword: 'webflow cms', status: 'Published', cms: 'Webflow' },
-  { id: '4', title: 'Next.js App Router vs Pages', keyword: 'nextjs app router', status: 'Research', cms: 'Framer' },
+  { id: '1', title: 'Top 10 SEO Strategies for 2026', keyword: 'seo strategies', status: 'Research', cms: 'WordPress', htmlContent: '<h1>Top 10 SEO Strategies</h1><p>Start writing here...</p>' },
+  { id: '2', title: 'How to use DataForSEO API', keyword: 'dataforseo tutorial', status: 'Writing', cms: 'Webflow', htmlContent: '<h1>DataForSEO Tutorial</h1>' },
+  { id: '3', title: 'A guide to Webflow CMS', keyword: 'webflow cms', status: 'Published', cms: 'Webflow', htmlContent: '' },
+  { id: '4', title: 'Next.js App Router vs Pages', keyword: 'nextjs app router', status: 'Research', cms: 'Framer', htmlContent: '' },
 ];
 
 export function KanbanBoard({ domain = 'example.com' }: { domain?: string }) {
   const [tasks, setTasks] = useState<ContentTask[]>(defaultTasks);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [isExtracting, setIsExtracting] = useState(false);
+  
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
+  const [isOptimizing, setIsOptimizing] = useState(false);
+  const [credits, setCredits] = useState(50); // Mock credits
 
   const handleExtract = async () => {
     setIsExtracting(true);
@@ -55,11 +68,12 @@ export function KanbanBoard({ domain = 'example.com' }: { domain?: string }) {
       
       if (data.success && data.pages) {
         const newTasks: ContentTask[] = data.pages.map((pageUrl: string, index: number) => ({
-          id: `extracted-${index}`,
+          id: `extracted-${index}-${Date.now()}`,
           title: new URL(pageUrl).pathname || 'Home',
           keyword: 'Assign Keyword...',
           status: 'Research',
           cms: 'WordPress',
+          htmlContent: '',
         }));
         
         setTasks((prev) => [...newTasks, ...prev]);
@@ -72,7 +86,11 @@ export function KanbanBoard({ domain = 'example.com' }: { domain?: string }) {
   };
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5, // Requires moving 5px to start drag, allowing clicks to pass through
+      },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
@@ -170,37 +188,101 @@ export function KanbanBoard({ domain = 'example.com' }: { domain?: string }) {
     );
   };
 
-  return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCorners}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-    >
-      <div className="mb-6 flex justify-end">
-        <button 
-          onClick={handleExtract}
-          disabled={isExtracting}
-          className="bg-primary text-primary-foreground px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors shadow-sm disabled:opacity-50"
-        >
-          {isExtracting ? 'Extracting Pages...' : 'Auto-Extract Site Pages'}
-        </button>
-      </div>
-      <div className="flex gap-6 overflow-x-auto w-full min-h-[500px]">
-        {columns.map((col) => (
-          <KanbanColumn 
-            key={col} 
-            id={col} 
-            title={col} 
-            tasks={tasks.filter((task) => task.status === col)}
-            onUpdateTask={handleUpdateTask} 
-          />
-        ))}
-      </div>
+  const selectedTask = tasks.find(t => t.id === selectedTaskId);
+  const currentScore = selectedTask ? calculateSeoScore(selectedTask.htmlContent || '', selectedTask.keyword) : 0;
 
-      <DragOverlay>
-        {activeTask ? <KanbanItem task={activeTask} onUpdateTask={handleUpdateTask} /> : null}
-      </DragOverlay>
-    </DndContext>
+  const handleAutoOptimize = async () => {
+    if (!selectedTask || credits < 1) return;
+    setIsOptimizing(true);
+    
+    try {
+      const res = await fetch('/api/optimize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ html: selectedTask.htmlContent || '', keyword: selectedTask.keyword }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        handleUpdateTask(selectedTask.id, { htmlContent: data.optimizedHtml });
+        setCredits(prev => prev - 1);
+      }
+    } catch (error) {
+      console.error('Optimization failed', error);
+    } finally {
+      setIsOptimizing(false);
+    }
+  };
+
+  return (
+    <>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCorners}
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+      >
+        <div className="mb-6 flex justify-end items-center gap-4">
+          <div className="bg-white px-3 py-1.5 rounded-lg text-sm font-medium text-gray-700 shadow-sm border border-gray-100 flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-green-500"></span>
+            {credits} AI Credits
+          </div>
+          <button 
+            onClick={handleExtract}
+            disabled={isExtracting}
+            className="bg-primary text-primary-foreground px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors shadow-sm disabled:opacity-50"
+          >
+            {isExtracting ? 'Extracting Pages...' : 'Auto-Extract Site Pages'}
+          </button>
+        </div>
+        <div className="flex gap-6 overflow-x-auto w-full min-h-[500px]">
+          {columns.map((col) => (
+            <KanbanColumn 
+              key={col} 
+              id={col} 
+              title={col} 
+              tasks={tasks.filter((task) => task.status === col)}
+              onUpdateTask={handleUpdateTask} 
+              onSelectTask={setSelectedTaskId}
+            />
+          ))}
+        </div>
+
+        <DragOverlay>
+          {activeTask ? <KanbanItem task={activeTask} onUpdateTask={handleUpdateTask} /> : null}
+        </DragOverlay>
+      </DndContext>
+
+      <Sheet open={!!selectedTaskId} onOpenChange={(open) => !open && setSelectedTaskId(null)}>
+        <SheetContent side="right" className="w-[800px] sm:max-w-[800px] sm:w-[90vw] p-0 flex flex-col bg-gray-50 overflow-y-auto">
+          {selectedTask && (
+            <>
+              <div className="p-6 border-b bg-white flex justify-between items-start sticky top-0 z-10">
+                <div>
+                  <SheetTitle className="text-2xl font-bold text-gray-900">{selectedTask.title}</SheetTitle>
+                  <p className="text-sm text-gray-500 mt-1">Focus Keyword: <span className="font-semibold text-primary">{selectedTask.keyword}</span></p>
+                </div>
+                <div className="flex gap-4 items-center">
+                  <SeoScoreGauge score={currentScore} />
+                  <button 
+                    onClick={handleAutoOptimize}
+                    disabled={isOptimizing || credits < 1}
+                    className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors shadow-sm disabled:opacity-50"
+                  >
+                    {isOptimizing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Bot className="w-4 h-4" />}
+                    Auto-Optimize (1 Credit)
+                  </button>
+                </div>
+              </div>
+              <div className="p-6 flex-1">
+                <ContentEditor 
+                  content={selectedTask.htmlContent || ''} 
+                  onChange={(html) => handleUpdateTask(selectedTask.id, { htmlContent: html })} 
+                />
+              </div>
+            </>
+          )}
+        </SheetContent>
+      </Sheet>
+    </>
   );
 }

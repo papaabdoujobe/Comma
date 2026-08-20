@@ -12,9 +12,10 @@ interface KanbanColumnProps {
   title: string;
   tasks: ContentTask[];
   onUpdateTask: (id: string, updates: Partial<ContentTask>) => void;
+  onSelectTask?: (id: string) => void;
 }
 
-export function KanbanColumn({ id, title, tasks, onUpdateTask }: KanbanColumnProps) {
+export function KanbanColumn({ id, title, tasks, onUpdateTask, onSelectTask }: KanbanColumnProps) {
   const { setNodeRef, isOver } = useDroppable({
     id: id,
     data: {
@@ -41,7 +42,7 @@ export function KanbanColumn({ id, title, tasks, onUpdateTask }: KanbanColumnPro
         <SortableContext items={tasks.map(t => t.id)} strategy={verticalListSortingStrategy}>
           <div className="flex flex-col gap-3 min-h-[150px]">
             {tasks.map((task) => (
-              <KanbanItem key={task.id} task={task} onUpdateTask={onUpdateTask} />
+              <KanbanItem key={task.id} task={task} onUpdateTask={onUpdateTask} onSelectTask={onSelectTask} />
             ))}
           </div>
         </SortableContext>
