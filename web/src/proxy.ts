@@ -37,10 +37,13 @@ export async function proxy(req: NextRequest) {
     return response
   }
 
-  // Exclude public files and Next.js internal routes
+  // Exclude public files and Next.js internal routes, as well as auth routes
   if (
     url.pathname.startsWith('/_next') ||
     url.pathname.startsWith('/api') ||
+    url.pathname.startsWith('/login') ||
+    url.pathname.startsWith('/auth') ||
+    url.pathname.startsWith('/onboarding') ||
     url.pathname.includes('.')
   ) {
     return response
