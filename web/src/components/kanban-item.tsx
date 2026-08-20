@@ -93,13 +93,11 @@ export function KanbanItem({ task, onUpdateTask, onSelectTask }: KanbanItemProps
             <span className={`text-[10px] uppercase font-bold tracking-wider px-2 py-1 rounded-md ${getCmsColor(task.cms)}`}>
               {task.cms}
             </span>
-            <DialogTrigger asChild>
-              <button 
-                onPointerDown={(e) => e.stopPropagation()} 
-                className="text-gray-300 hover:text-gray-500 transition-colors opacity-0 group-hover:opacity-100"
-              >
-                <MoreHorizontal className="w-4 h-4" />
-              </button>
+            <DialogTrigger 
+              onPointerDown={(e: React.PointerEvent) => e.stopPropagation()} 
+              className="text-gray-300 hover:text-gray-500 transition-colors opacity-0 group-hover:opacity-100 flex items-center justify-center bg-transparent border-none p-0 cursor-pointer"
+            >
+              <MoreHorizontal className="w-4 h-4" />
             </DialogTrigger>
           </div>
           <h4 className="font-semibold text-gray-900 text-sm leading-snug mb-3 line-clamp-2">
@@ -112,7 +110,7 @@ export function KanbanItem({ task, onUpdateTask, onSelectTask }: KanbanItemProps
         </CardContent>
       </Card>
 
-      <DialogContent onPointerDownOutside={(e) => e.preventDefault()}>
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Assign Keyword</DialogTitle>
           <DialogDescription>

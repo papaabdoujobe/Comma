@@ -3,7 +3,7 @@ import Stripe from 'stripe';
 
 // Initialize Stripe with a mock key or real key from env
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_mock123', {
-  apiVersion: '2024-06-20', // Latest stable API version
+  apiVersion: '2024-06-20' as any, // Latest stable API version
 });
 
 export async function POST(req: Request) {
