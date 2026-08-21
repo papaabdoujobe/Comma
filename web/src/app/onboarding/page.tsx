@@ -26,7 +26,7 @@ export default function OnboardingPage() {
     // Save site and BYOK securely...
     
     // Redirect to dynamic domain or dashboard root
-    router.push('/dashboard')
+    router.push('/')
   }
 
   return (

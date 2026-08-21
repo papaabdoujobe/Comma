@@ -19,7 +19,7 @@ export async function login(formData: FormData) {
   }
 
   revalidatePath('/', 'layout')
-  redirect('/dashboard') // Redirects to the respective subdomain dashboard via proxy
+  redirect('/') // Redirects to the respective subdomain dashboard via proxy
 }
 
 export async function signup(formData: FormData) {
