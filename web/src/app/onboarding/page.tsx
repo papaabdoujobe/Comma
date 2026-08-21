@@ -47,7 +47,7 @@ export default function OnboardingPage() {
     <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4 py-12">
       <Card className="w-full max-w-2xl shadow-sm border-slate-200">
         <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-3xl font-bold tracking-tight">Welcome to Comma</CardTitle>
+          <CardTitle className="text-3xl font-bold tracking-tight">Welcome to Commas</CardTitle>
           <CardDescription>
             Let's get your workspace set up in just a few steps.
           </CardDescription>

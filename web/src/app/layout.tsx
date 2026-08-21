@@ -15,7 +15,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Comma - Agency Reporting & SEO Dashboard",
+  title: "Commas - Unified Agency Management Platform",
   description: "White-labeled dashboard for multi-channel search data.",
 };
 

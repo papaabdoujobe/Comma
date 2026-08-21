@@ -9,7 +9,20 @@ import {
   LineChart,
   Settings,
   Database,
+  Briefcase,
+  Plug,
+  ChevronDown,
+  Plus
 } from "lucide-react"
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 import {
   Sidebar,
@@ -34,6 +47,16 @@ const data = {
       icon: Home,
     },
     {
+      title: "Clients",
+      url: "/clients",
+      icon: Briefcase,
+    },
+    {
+      title: "Integrations",
+      url: "/integrations",
+      icon: Plug,
+    },
+    {
       title: "Content",
       url: "/content",
       icon: FileText,
@@ -49,31 +72,58 @@ const data = {
       icon: Database,
     },
     {
-      title: "Social",
-      url: "#",
-      icon: Users,
-    },
-    {
-      title: "Analytics",
-      url: "#",
+      title: "Reports",
+      url: "/reports",
       icon: LineChart,
     },
   ],
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ clients = [], ...props }: React.ComponentProps<typeof Sidebar> & { clients?: any[] }) {
   const params = useParams();
   const pathname = usePathname();
+  const [activeClient, setActiveClient] = React.useState(clients[0] || null);
+
   // With middleware rewrites, the domain is implicitly handled for absolute paths on the client,
   // but to be safe we can just use relative paths or let next router handle it since the root is the domain.
   // Actually, since we rewrite, navigating to `/content` will hit the middleware which rewrites it to `/[domain]/content`.
   
   return (
     <Sidebar {...props} className="border-r-0 shadow-sm bg-white">
-      <SidebarHeader className="h-16 px-8 mt-2 flex items-center justify-start border-none">
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900 flex items-center gap-2">
-            Comma
-        </h1>
+      <SidebarHeader className="h-16 px-4 mt-2 flex items-center justify-start border-none">
+        <DropdownMenu>
+          <DropdownMenuTrigger className="flex items-center justify-between w-full p-2 hover:bg-gray-50 rounded-md transition-colors outline-none">
+            <div className="flex items-center gap-2 text-left">
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                <Briefcase className="size-4" />
+              </div>
+              <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-semibold">Commas</span>
+                <span className="truncate text-xs text-gray-500">{activeClient ? activeClient.name : 'Select Client'}</span>
+              </div>
+            </div>
+            <ChevronDown className="h-4 w-4 text-gray-500" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56" align="start" side="bottom" sideOffset={8}>
+            <DropdownMenuLabel className="text-xs text-gray-500 font-normal">Switch Client</DropdownMenuLabel>
+            {clients.map((client) => (
+              <DropdownMenuItem 
+                key={client.id} 
+                onClick={() => setActiveClient(client)}
+                className="cursor-pointer"
+              >
+                {client.name}
+              </DropdownMenuItem>
+            ))}
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className="cursor-pointer" asChild>
+              <Link href="/clients">
+                <Plus className="mr-2 h-4 w-4" />
+                <span>Create Client</span>
+              </Link>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu className="px-4 py-4 space-y-1">
