@@ -67,10 +67,8 @@ export function ReportsClient({ clients, initialReports }: { clients: any[], ini
         <h2 className="text-3xl font-bold tracking-tight">Client Reports</h2>
         <div className="flex items-center space-x-2">
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
-              <Button disabled={clients.length === 0}>
+            <DialogTrigger render={<Button disabled={clients.length === 0} />}>
                 <Plus className="mr-2 h-4 w-4" /> New Report
-              </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>

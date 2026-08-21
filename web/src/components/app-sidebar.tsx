@@ -116,11 +116,9 @@ export function AppSidebar({ clients = [], ...props }: React.ComponentProps<type
               </DropdownMenuItem>
             ))}
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer" asChild>
-              <Link href="/clients">
+            <DropdownMenuItem className="cursor-pointer" render={<Link href="/clients" />}>
                 <Plus className="mr-2 h-4 w-4" />
                 <span>Create Client</span>
-              </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

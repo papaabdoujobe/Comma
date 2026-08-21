@@ -182,10 +182,8 @@ export function ReportBuilderClient({ report, initialWidgets }: { report: any, i
             </Button>
           )}
           <Dialog open={isWidgetDialogOpen} onOpenChange={setIsWidgetDialogOpen}>
-            <DialogTrigger asChild>
-              <Button>
+            <DialogTrigger render={<Button />}>
                 <Plus className="mr-2 h-4 w-4" /> Add Widget
-              </Button>
             </DialogTrigger>
             <DialogContent className="max-w-2xl">
               <DialogHeader>

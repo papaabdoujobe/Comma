@@ -68,10 +68,8 @@ export function ClientsClient({ initialClients }: { initialClients: any[] }) {
         <h2 className="text-3xl font-bold tracking-tight">Clients</h2>
         <div className="flex items-center space-x-2">
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
-              <Button>
+            <DialogTrigger render={<Button />}>
                 <Plus className="mr-2 h-4 w-4" /> Add Client
-              </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
