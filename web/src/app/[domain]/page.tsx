@@ -1,19 +1,34 @@
 import * as React from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Search } from "lucide-react"
+import { createClient } from "@/utils/supabase/server"
+import { redirect } from "next/navigation"
 
 export default async function DashboardPage(props: { params: Promise<{ domain: string }> }) {
   const params = await props.params;
   const domain = params.domain;
 
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    return redirect('/login');
+  }
+
+  const firstName = user.user_metadata?.first_name || 'Guest';
+  const websiteUrl = user.user_metadata?.website_url || domain;
+
   return (
     <div className="flex-1 overflow-y-auto px-8 py-6">
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Dashboard</h2>
-        <div className="relative w-full">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+      <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900">Welcome back, {firstName} 👋</h2>
+          <p className="text-gray-500 mt-1">Here is the latest data for <a href={websiteUrl} target="_blank" className="text-primary hover:underline font-medium">{websiteUrl}</a></p>
+        </div>
+        <div className="relative w-full md:w-64">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
           <input
-            className="block w-full pl-11 pr-4 py-3 border-none rounded-xl bg-white shadow-sm text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-primary focus:ring-opacity-50 transition-shadow outline-none"
+            className="block w-full pl-9 pr-4 py-2 border border-slate-200 rounded-lg bg-white shadow-sm text-sm text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-primary focus:border-primary transition-shadow outline-none"
             placeholder="Search"
             type="text"
           />

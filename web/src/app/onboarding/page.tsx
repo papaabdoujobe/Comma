@@ -11,8 +11,9 @@ export default function OnboardingPage() {
   const [step, setStep] = useState(1)
   const [url, setUrl] = useState('')
   const [siteType, setSiteType] = useState('client')
-  const [byokEmail, setByokEmail] = useState('')
-  const [byokKey, setByokKey] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter()
   const supabase = createClient()
 
@@ -20,11 +21,24 @@ export default function OnboardingPage() {
   const handleBack = () => setStep(step - 1)
 
   const handleFinish = async () => {
-    // In a real app, this would save to Supabase via an API route or server action
-    // We will mock the subscription and redirect to dashboard
+    setIsSubmitting(true)
     
-    // Save site and BYOK securely...
-    
+    // Save site and user info to Supabase auth metadata
+    const { error } = await supabase.auth.updateUser({
+      data: {
+        first_name: firstName,
+        last_name: lastName,
+        website_url: url,
+        website_type: siteType
+      }
+    })
+
+    if (error) {
+      console.error('Error updating user:', error)
+      setIsSubmitting(false)
+      return
+    }
+
     // Redirect to dynamic domain or dashboard root
     router.push('/')
   }
@@ -75,70 +89,26 @@ export default function OnboardingPage() {
 
           {step === 2 && (
             <div className="space-y-6 animate-in fade-in slide-in-from-right-4">
-              <h3 className="text-lg font-semibold">2. Connect Free Data Sources</h3>
+              <h3 className="text-lg font-semibold">2. Personal Information</h3>
               <p className="text-sm text-slate-500">
-                Comma uses these free integrations to pull in your sitemaps, indexation status, and traffic data so we don't have to guess.
+                How should we address you in the dashboard?
               </p>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Button variant="outline" className="h-16 justify-start px-4">
-                  <div className="w-8 h-8 rounded bg-slate-100 mr-4 flex items-center justify-center">G</div>
-                  <div className="text-left">
-                    <div className="font-semibold">Google Search Console</div>
-                    <div className="text-xs text-slate-500">Not Connected</div>
-                  </div>
-                </Button>
-                
-                <Button variant="outline" className="h-16 justify-start px-4">
-                  <div className="w-8 h-8 rounded bg-slate-100 mr-4 flex items-center justify-center">A</div>
-                  <div className="text-left">
-                    <div className="font-semibold">Google Analytics 4</div>
-                    <div className="text-xs text-slate-500">Not Connected</div>
-                  </div>
-                </Button>
-                
-                <Button variant="outline" className="h-16 justify-start px-4">
-                  <div className="w-8 h-8 rounded bg-slate-100 mr-4 flex items-center justify-center">M</div>
-                  <div className="text-left">
-                    <div className="font-semibold">Microsoft Webmaster</div>
-                    <div className="text-xs text-slate-500">Not Connected</div>
-                  </div>
-                </Button>
-
-                <Button variant="outline" className="h-16 justify-start px-4">
-                  <div className="w-8 h-8 rounded bg-slate-100 mr-4 flex items-center justify-center">W</div>
-                  <div className="text-left">
-                    <div className="font-semibold">CMS (WordPress/Webflow)</div>
-                    <div className="text-xs text-slate-500">Not Connected</div>
-                  </div>
-                </Button>
-              </div>
-            </div>
-          )}
-
-          {step === 3 && (
-            <div className="space-y-6 animate-in fade-in slide-in-from-right-4">
-              <h3 className="text-lg font-semibold">3. Google Indexing BYOK</h3>
-              <p className="text-sm text-slate-500">
-                To bypass standard rate limits (200 URLs/day), provide your own Google Service Account JSON credentials.
-              </p>
-              
-              <div className="space-y-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Service Account Email</label>
+                  <label className="text-sm font-medium">First Name</label>
                   <Input 
-                    placeholder="indexing-agent@your-project.iam.gserviceaccount.com" 
-                    value={byokEmail}
-                    onChange={(e) => setByokEmail(e.target.value)}
+                    placeholder="John" 
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Private Key</label>
-                  <textarea 
-                    className="flex min-h-[120px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                    placeholder="-----BEGIN PRIVATE KEY-----\nMIIEvQIB...\n-----END PRIVATE KEY-----\n"
-                    value={byokKey}
-                    onChange={(e) => setByokKey(e.target.value)}
+                  <label className="text-sm font-medium">Last Name</label>
+                  <Input 
+                    placeholder="Doe" 
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
                   />
                 </div>
               </div>
@@ -148,18 +118,18 @@ export default function OnboardingPage() {
         
         <CardFooter className="flex justify-between border-t pt-6 mt-6">
           {step > 1 ? (
-            <Button variant="ghost" onClick={handleBack}>Back</Button>
+            <Button variant="ghost" onClick={handleBack} disabled={isSubmitting}>Back</Button>
           ) : (
             <div></div> // Placeholder to keep Next button on the right
           )}
           
-          {step < 3 ? (
-            <Button className="bg-[#E06719] hover:bg-[#c95d17] text-white" onClick={handleNext} disabled={step === 1 && !url}>
+          {step === 1 ? (
+            <Button className="bg-[#E06719] hover:bg-[#c95d17] text-white" onClick={handleNext} disabled={!url}>
               Next Step
             </Button>
           ) : (
-            <Button className="bg-[#E06719] hover:bg-[#c95d17] text-white" onClick={handleFinish}>
-              Finish & Extract Site
+            <Button className="bg-[#E06719] hover:bg-[#c95d17] text-white" onClick={handleFinish} disabled={!firstName || !lastName || isSubmitting}>
+              {isSubmitting ? 'Saving...' : 'Finish & Enter Dashboard'}
             </Button>
           )}
         </CardFooter>
