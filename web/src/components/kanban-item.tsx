@@ -24,9 +24,12 @@ interface KanbanItemProps {
   onSelectTask?: (id: string) => void;
 }
 
+import { createClient } from '@/utils/supabase/client';
+
 export function KanbanItem({ task, onUpdateTask, onSelectTask }: KanbanItemProps) {
-  const [keyword, setKeyword] = useState(task.keyword);
+  const [keyword, setKeyword] = useState(task.focus_keyword || '');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const supabase = createClient();
 
   const {
     setNodeRef,
@@ -67,8 +70,9 @@ export function KanbanItem({ task, onUpdateTask, onSelectTask }: KanbanItemProps
     }
   }
 
-  const handleSave = () => {
-    onUpdateTask(task.id, { keyword });
+  const handleSave = async () => {
+    onUpdateTask(task.id, { focus_keyword: keyword });
+    await supabase.from('content_drafts').update({ focus_keyword: keyword }).eq('id', task.id);
     setIsDialogOpen(false);
   };
 
@@ -90,8 +94,8 @@ export function KanbanItem({ task, onUpdateTask, onSelectTask }: KanbanItemProps
       >
         <CardContent className="p-4">
           <div className="flex justify-between items-start mb-2">
-            <span className={`text-[10px] uppercase font-bold tracking-wider px-2 py-1 rounded-md ${getCmsColor(task.cms)}`}>
-              {task.cms}
+            <span className={`text-[10px] uppercase font-bold tracking-wider px-2 py-1 rounded-md ${getCmsColor(task.target_cms || 'WordPress')}`}>
+              {task.target_cms || 'WordPress'}
             </span>
             <DialogTrigger 
               onPointerDown={(e: React.PointerEvent) => e.stopPropagation()} 
@@ -105,7 +109,7 @@ export function KanbanItem({ task, onUpdateTask, onSelectTask }: KanbanItemProps
           </h4>
           <div className="flex items-center gap-2 text-xs font-medium text-gray-500">
             <FileText className="w-3 h-3 text-gray-400" />
-            <span className="truncate">{task.keyword}</span>
+            <span className="truncate">{task.focus_keyword}</span>
           </div>
         </CardContent>
       </Card>

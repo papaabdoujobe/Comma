@@ -1,10 +1,25 @@
 import React from 'react';
 import { KanbanBoard } from '@/components/kanban-board';
 import { Search, Plus } from 'lucide-react';
+import { createClient } from '@/utils/supabase/server';
+import { redirect } from 'next/navigation';
 
 export default async function ContentPage(props: { params: Promise<{ domain: string }> }) {
   const params = await props.params;
   const domain = params.domain;
+
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect('/login');
+  }
+
+  const { data: drafts } = await supabase
+    .from('content_drafts')
+    .select('*')
+    .eq('domain', domain)
+    .order('updated_at', { ascending: false });
 
   return (
     <div className="flex-1 overflow-y-auto px-8 py-6 bg-[#f0f2f5]">
@@ -29,7 +44,7 @@ export default async function ContentPage(props: { params: Promise<{ domain: str
         </div>
       </div>
 
-      <KanbanBoard domain={domain} />
+      <KanbanBoard domain={domain} initialTasks={drafts || []} userId={user.id} />
     </div>
   );
 }

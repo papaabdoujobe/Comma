@@ -29,28 +29,34 @@ import {
 } from "@/components/ui/sheet"
 import { Bot, Loader2 } from 'lucide-react';
 
-export type ContentStatus = "Research" | "Writing" | "Published";
+export type ContentStatus = "research" | "writing" | "published";
 
 export type ContentTask = {
   id: string;
   title: string;
-  keyword: string;
+  focus_keyword: string | null;
   status: ContentStatus;
-  cms: string;
-  htmlContent?: string;
+  target_cms: string | null;
+  content_body: string;
 };
 
-const defaultTasks: ContentTask[] = [
-  { id: '1', title: 'Top 10 SEO Strategies for 2026', keyword: 'seo strategies', status: 'Research', cms: 'WordPress', htmlContent: '<h1>Top 10 SEO Strategies</h1><p>Start writing here...</p>' },
-  { id: '2', title: 'How to use DataForSEO API', keyword: 'dataforseo tutorial', status: 'Writing', cms: 'Webflow', htmlContent: '<h1>DataForSEO Tutorial</h1>' },
-  { id: '3', title: 'A guide to Webflow CMS', keyword: 'webflow cms', status: 'Published', cms: 'Webflow', htmlContent: '' },
-  { id: '4', title: 'Next.js App Router vs Pages', keyword: 'nextjs app router', status: 'Research', cms: 'Framer', htmlContent: '' },
-];
+import { createClient } from '@/utils/supabase/client';
 
-export function KanbanBoard({ domain = 'example.com' }: { domain?: string }) {
-  const [tasks, setTasks] = useState<ContentTask[]>(defaultTasks);
+export function KanbanBoard({ domain = 'example.com', initialTasks = [], userId }: { domain?: string, initialTasks?: any[], userId?: string }) {
+  // Map Supabase rows to our ContentTask type
+  const mappedTasks = initialTasks.map(t => ({
+    id: t.id,
+    title: t.title,
+    focus_keyword: t.focus_keyword || 'Assign Keyword...',
+    status: (t.status || 'research') as ContentStatus,
+    target_cms: t.target_cms || 'WordPress',
+    content_body: t.content_body || ''
+  }));
+
+  const [tasks, setTasks] = useState<ContentTask[]>(mappedTasks);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [isExtracting, setIsExtracting] = useState(false);
+  const supabase = createClient();
   
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
   const [isOptimizing, setIsOptimizing] = useState(false);
@@ -67,16 +73,34 @@ export function KanbanBoard({ domain = 'example.com' }: { domain?: string }) {
       const data = await res.json();
       
       if (data.success && data.pages) {
-        const newTasks: ContentTask[] = data.pages.map((pageUrl: string, index: number) => ({
-          id: `extracted-${index}-${Date.now()}`,
+        const newTasksToInsert = data.pages.map((pageUrl: string, index: number) => ({
+          user_id: userId,
+          domain,
           title: new URL(pageUrl).pathname || 'Home',
-          keyword: 'Assign Keyword...',
-          status: 'Research',
-          cms: 'WordPress',
-          htmlContent: '',
+          focus_keyword: null,
+          status: 'research',
+          target_cms: 'WordPress',
+          content_body: '',
         }));
         
-        setTasks((prev) => [...newTasks, ...prev]);
+        const { data: insertedData, error } = await supabase
+          .from('content_drafts')
+          .insert(newTasksToInsert)
+          .select();
+
+        if (error) throw error;
+
+        if (insertedData) {
+          const newTasks: ContentTask[] = insertedData.map(t => ({
+             id: t.id,
+             title: t.title,
+             focus_keyword: 'Assign Keyword...',
+             status: 'research',
+             target_cms: 'WordPress',
+             content_body: ''
+          }));
+          setTasks((prev) => [...newTasks, ...prev]);
+        }
       }
     } catch (err) {
       console.error('Extraction failed', err);
@@ -96,11 +120,15 @@ export function KanbanBoard({ domain = 'example.com' }: { domain?: string }) {
     })
   );
 
-  const columns: ContentStatus[] = ["Research", "Writing", "Published"];
+  const columns: ContentStatus[] = ["research", "writing", "published"];
 
   function handleDragStart(event: DragStartEvent) {
     const { active } = event;
     setActiveId(active.id as string);
+  }
+
+  async function updateStatusInDB(id: string, newStatus: string) {
+    await supabase.from('content_drafts').update({ status: newStatus }).eq('id', id);
   }
 
   async function handleDragEnd(event: DragEndEvent) {
@@ -127,9 +155,11 @@ export function KanbanBoard({ domain = 'example.com' }: { domain?: string }) {
         const overIndex = tasks.findIndex((t) => t.id === overId);
 
         if (tasks[activeIndex].status !== tasks[overIndex].status) {
-          tasks[activeIndex].status = tasks[overIndex].status;
+          const newStatus = tasks[overIndex].status;
+          tasks[activeIndex].status = newStatus;
+          updateStatusInDB(activeId as string, newStatus);
           
-          if (tasks[activeIndex].status === 'Published') {
+          if (newStatus === 'published') {
             triggerN8nPublish(tasks[activeIndex]);
           }
 
@@ -148,8 +178,9 @@ export function KanbanBoard({ domain = 'example.com' }: { domain?: string }) {
         
         if (tasks[activeIndex].status !== targetStatus) {
            tasks[activeIndex].status = targetStatus;
+           updateStatusInDB(activeId as string, targetStatus);
            
-           if (targetStatus === 'Published') {
+           if (targetStatus === 'published') {
              triggerN8nPublish(tasks[activeIndex]);
            }
            
@@ -189,7 +220,7 @@ export function KanbanBoard({ domain = 'example.com' }: { domain?: string }) {
   };
 
   const selectedTask = tasks.find(t => t.id === selectedTaskId);
-  const currentScore = selectedTask ? calculateSeoScore(selectedTask.htmlContent || '', selectedTask.keyword) : 0;
+  const currentScore = selectedTask ? calculateSeoScore(selectedTask.content_body || '', selectedTask.focus_keyword || '') : 0;
 
   const handleAutoOptimize = async () => {
     if (!selectedTask || credits < 1) return;
@@ -199,11 +230,12 @@ export function KanbanBoard({ domain = 'example.com' }: { domain?: string }) {
       const res = await fetch('/api/optimize', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ html: selectedTask.htmlContent || '', keyword: selectedTask.keyword }),
+        body: JSON.stringify({ html: selectedTask.content_body || '', keyword: selectedTask.focus_keyword || '' }),
       });
       const data = await res.json();
       if (data.success) {
-        handleUpdateTask(selectedTask.id, { htmlContent: data.optimizedHtml });
+        handleUpdateTask(selectedTask.id, { content_body: data.optimizedHtml });
+        await supabase.from('content_drafts').update({ content_body: data.optimizedHtml }).eq('id', selectedTask.id);
         setCredits(prev => prev - 1);
       }
     } catch (error) {
@@ -259,7 +291,7 @@ export function KanbanBoard({ domain = 'example.com' }: { domain?: string }) {
               <div className="p-6 border-b bg-white flex justify-between items-start sticky top-0 z-10">
                 <div>
                   <SheetTitle className="text-2xl font-bold text-gray-900">{selectedTask.title}</SheetTitle>
-                  <p className="text-sm text-gray-500 mt-1">Focus Keyword: <span className="font-semibold text-primary">{selectedTask.keyword}</span></p>
+                  <p className="text-sm text-gray-500 mt-1">Focus Keyword: <span className="font-semibold text-primary">{selectedTask.focus_keyword}</span></p>
                 </div>
                 <div className="flex gap-4 items-center">
                   <SeoScoreGauge score={currentScore} />
@@ -275,8 +307,11 @@ export function KanbanBoard({ domain = 'example.com' }: { domain?: string }) {
               </div>
               <div className="p-6 flex-1">
                 <ContentEditor 
-                  content={selectedTask.htmlContent || ''} 
-                  onChange={(html) => handleUpdateTask(selectedTask.id, { htmlContent: html })} 
+                  content={selectedTask.content_body || ''} 
+                  onChange={async (html) => {
+                    handleUpdateTask(selectedTask.id, { content_body: html });
+                    await supabase.from('content_drafts').update({ content_body: html }).eq('id', selectedTask.id);
+                  }} 
                 />
               </div>
             </>
