@@ -8,7 +8,7 @@ export default function SignupPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
       <Card className="w-full max-w-md shadow-sm border-slate-200">
-        <form>
+        <form action={signup}>
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl font-bold tracking-tight text-center">Create an account</CardTitle>
             <CardDescription className="text-center">
@@ -26,7 +26,7 @@ export default function SignupPage() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
-            <Button className="w-full" formAction={signup}>Sign Up</Button>
+            <Button className="w-full" type="submit">Sign Up</Button>
             <div className="text-center text-sm text-muted-foreground mt-4">
               Already have an account?{' '}
               <Link href="/login" className="underline underline-offset-4 hover:text-primary">
