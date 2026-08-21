@@ -4,7 +4,11 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 
-export default function SignupPage() {
+export default async function SignupPage(props: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
+  const searchParams = await props.searchParams;
+  const error = searchParams.error as string | undefined;
+  const message = searchParams.message as string | undefined;
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
       <Card className="w-full max-w-md shadow-sm border-slate-200">
@@ -16,6 +20,16 @@ export default function SignupPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            {error && (
+              <div className="bg-red-50 text-red-500 p-3 rounded-md text-sm border border-red-200">
+                {error}
+              </div>
+            )}
+            {message && (
+              <div className="bg-green-50 text-green-600 p-3 rounded-md text-sm border border-green-200">
+                {message}
+              </div>
+            )}
             <div className="space-y-2">
               <label htmlFor="email" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Email</label>
               <Input id="email" name="email" type="email" placeholder="m@example.com" required />

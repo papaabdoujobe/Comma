@@ -12,10 +12,15 @@ export async function signup(formData: FormData) {
     password: formData.get('password') as string,
   }
 
-  const { error } = await supabase.auth.signUp(data)
+  const { data: authData, error } = await supabase.auth.signUp(data)
 
   if (error) {
-    return redirect('/signup?error=Could not sign up user')
+    return redirect('/signup?error=Could not sign up user: ' + error.message)
+  }
+
+  if (!authData.session) {
+    // Supabase is configured to require email confirmation
+    return redirect('/login?message=Check your email to confirm your account')
   }
 
   // Usually signups require email confirmation, but for now we'll redirect to a generic welcome page or dashboard
