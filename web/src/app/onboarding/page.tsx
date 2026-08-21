@@ -39,6 +39,22 @@ export default function OnboardingPage() {
       return
     }
 
+    // Auto-create owner client account
+    const { data: { user } } = await supabase.auth.getUser()
+    if (user) {
+      const { error: clientError } = await supabase.from('clients').insert({
+        agency_id: user.id,
+        name: `${firstName} ${lastName} (Owner)`,
+        domain: url,
+        website_url: url,
+        is_owner: true,
+        services_offered: ['Site Management']
+      })
+      if (clientError) {
+        console.error('Error creating owner client:', clientError)
+      }
+    }
+
     // Redirect to dynamic domain or dashboard root
     router.push('/')
   }

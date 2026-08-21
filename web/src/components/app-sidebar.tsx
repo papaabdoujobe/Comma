@@ -52,8 +52,8 @@ const data = {
       icon: Briefcase,
     },
     {
-      title: "Integrations",
-      url: "/integrations",
+      title: "Websites",
+      url: "/sites",
       icon: Plug,
     },
     {
@@ -116,7 +116,12 @@ export function AppSidebar({ clients = [], ...props }: React.ComponentProps<type
               </DropdownMenuItem>
             ))}
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer" render={<Link href="/clients" />}>
+            <DropdownMenuItem 
+              className="cursor-pointer" 
+              onClick={() => {
+                window.location.href = "/clients";
+              }}
+            >
                 <Plus className="mr-2 h-4 w-4" />
                 <span>Create Client</span>
             </DropdownMenuItem>
@@ -147,10 +152,10 @@ export function AppSidebar({ clients = [], ...props }: React.ComponentProps<type
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton className="py-6 px-4 text-gray-500 hover:text-gray-900 hover:bg-gray-50 font-medium transition-colors rounded-md">
-              <div className="flex items-center gap-3 w-full cursor-pointer">
+              <Link href="/settings" className="flex items-center gap-3 w-full cursor-pointer">
                 <Settings className="w-5 h-5" />
                 <span>Settings</span>
-              </div>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

@@ -26,7 +26,14 @@ export function ClientsClient({ initialClients }: { initialClients: any[] }) {
   
   const supabase = createClient();
 
-  const handleCreateClient = async () => {
+  const [services, setServices] = useState<string[]>([]);
+    const availableServices = ["SEO", "Site Management", "Social Media", "Content Generation"];
+
+    const toggleService = (service: string) => {
+        setServices(prev => prev.includes(service) ? prev.filter(s => s !== service) : [...prev, service]);
+    };
+
+    const handleCreateClient = async () => {
     if (!newClientName) {
       toast.error("Client name is required");
       return;
@@ -35,7 +42,10 @@ export function ClientsClient({ initialClients }: { initialClients: any[] }) {
     setIsSubmitting(true);
     
     const { data: userData } = await supabase.auth.getUser();
-    if (!userData.user) return;
+    if (!userData.user) {
+        setIsSubmitting(false);
+        return;
+    }
 
     const { data, error } = await supabase
       .from('clients')
@@ -43,7 +53,9 @@ export function ClientsClient({ initialClients }: { initialClients: any[] }) {
         { 
           agency_id: userData.user.id,
           name: newClientName, 
-          domain: newClientDomain 
+          domain: newClientDomain,
+          website_url: newClientDomain,
+          services_offered: services
         }
       ])
       .select()
@@ -57,6 +69,7 @@ export function ClientsClient({ initialClients }: { initialClients: any[] }) {
       setIsDialogOpen(false);
       setNewClientName("");
       setNewClientDomain("");
+      setServices([]);
     }
     
     setIsSubmitting(false);
@@ -89,13 +102,29 @@ export function ClientsClient({ initialClients }: { initialClients: any[] }) {
                   />
                 </div>
                 <div className="grid gap-2">
-                  <label htmlFor="domain" className="text-sm font-medium">Primary Domain</label>
+                  <label htmlFor="domain" className="text-sm font-medium">Website URL</label>
                   <Input 
                     id="domain" 
-                    placeholder="acmecorp.com" 
+                    placeholder="https://acmecorp.com" 
                     value={newClientDomain}
                     onChange={(e) => setNewClientDomain(e.target.value)}
                   />
+                </div>
+                <div className="grid gap-2 mt-2">
+                    <label className="text-sm font-medium">Services Offered</label>
+                    <div className="grid grid-cols-2 gap-2 mt-1">
+                        {availableServices.map(service => (
+                            <label key={service} className="flex items-center space-x-2 text-sm">
+                                <input 
+                                    type="checkbox" 
+                                    checked={services.includes(service)}
+                                    onChange={() => toggleService(service)}
+                                    className="rounded border-gray-300 text-primary focus:ring-primary"
+                                />
+                                <span>{service}</span>
+                            </label>
+                        ))}
+                    </div>
                 </div>
               </div>
               <DialogFooter>
@@ -128,6 +157,9 @@ export function ClientsClient({ initialClients }: { initialClients: any[] }) {
             <Card key={client.id} className="hover:border-primary/50 transition-colors cursor-pointer group relative">
               <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
                 <CardTitle className="text-lg font-semibold">{client.name}</CardTitle>
+                {client.is_owner && (
+                  <span className="bg-orange-100 text-[#E06719] text-xs px-2 py-1 rounded-md font-medium">Owner</span>
+                )}
                 <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity">
                   <MoreVertical className="h-4 w-4" />
                 </Button>
@@ -135,11 +167,18 @@ export function ClientsClient({ initialClients }: { initialClients: any[] }) {
               <CardContent>
                 <div className="text-sm text-gray-500 flex items-center mb-4">
                   <ExternalLink className="h-3 w-3 mr-1" />
-                  {client.domain || "No domain set"}
+                  {client.website_url || client.domain || "No domain set"}
                 </div>
+                {client.services_offered && client.services_offered.length > 0 && (
+                  <div className="flex flex-wrap gap-1 mb-4">
+                    {client.services_offered.map((service: string) => (
+                      <span key={service} className="bg-slate-100 text-slate-600 text-[10px] uppercase tracking-wider px-2 py-1 rounded-full">{service}</span>
+                    ))}
+                  </div>
+                )}
                 <div className="flex gap-2">
                   <Button variant="outline" size="sm" className="w-full text-xs">
-                    <Settings className="mr-1 h-3 w-3" /> Manage Integrations
+                    <Settings className="mr-1 h-3 w-3" /> Manage Client
                   </Button>
                 </div>
               </CardContent>
