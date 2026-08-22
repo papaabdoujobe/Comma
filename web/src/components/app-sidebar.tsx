@@ -12,7 +12,8 @@ import {
   Briefcase,
   Plug,
   ChevronDown,
-  Plus
+  Plus,
+  Share2
 } from "lucide-react"
 
 import {
@@ -62,6 +63,16 @@ const data = {
       icon: FileText,
     },
     {
+      title: "Social",
+      url: "/social",
+      icon: Share2,
+    },
+    {
+      title: "Analytics",
+      url: "/analytics",
+      icon: LineChart,
+    },
+    {
       title: "Keywords",
       url: "/keywords",
       icon: Search,
@@ -93,13 +104,13 @@ export function AppSidebar({ clients = [], ...props }: React.ComponentProps<type
       <SidebarHeader className="h-16 px-4 mt-2 flex items-center justify-start border-none">
         <DropdownMenu>
           <DropdownMenuTrigger className="flex items-center justify-between w-full p-2 hover:bg-gray-50 rounded-md transition-colors outline-none">
-            <div className="flex items-center gap-2 text-left">
-              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                <Briefcase className="size-4" />
+            <div className="flex items-center gap-3 text-left w-[180px]">
+              <div className="flex h-8 items-center justify-center">
+                <img src="/commas-logo-black.png" alt="Commas" className="h-6 object-contain" />
               </div>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">Commas</span>
-                <span className="truncate text-xs text-gray-500">{activeClient ? activeClient.name : 'Select Client'}</span>
+              <div className="grid flex-1 text-left text-sm leading-tight border-l pl-3 border-gray-200">
+                <span className="truncate text-xs font-medium text-gray-500 uppercase tracking-wider">Client</span>
+                <span className="truncate font-semibold text-gray-900">{activeClient ? activeClient.name : 'Select Client'}</span>
               </div>
             </div>
             <ChevronDown className="h-4 w-4 text-gray-500" />

@@ -2,6 +2,8 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { SitesClient } from "./sites-client";
 
+import { Suspense } from "react";
+
 export default async function SitesPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -23,5 +25,9 @@ export default async function SitesPage() {
     `)
     .eq('clients.agency_id', user.id);
 
-  return <SitesClient clients={clients || []} integrations={integrations || []} />;
+  return (
+    <Suspense fallback={<div className="p-8">Loading sites...</div>}>
+      <SitesClient clients={clients || []} integrations={integrations || []} />
+    </Suspense>
+  );
 }
