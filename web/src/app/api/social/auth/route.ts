@@ -19,7 +19,7 @@ export async function GET(request: Request) {
 
     const zernioApiKey = process.env.ZERNIO_API_KEY;
 
-    let profiles = [];
+    let profiles: any[] = [];
     if (zernioApiKey) {
       try {
         // Mock Zernio API call to fetch authenticated profiles

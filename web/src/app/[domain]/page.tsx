@@ -63,6 +63,7 @@ export default async function DashboardPage(props: { params: Promise<{ domain: s
           </a>
         </div>
       ) : (
+        <>
           {/* Chat Interface */}
           <div className="mt-8">
             <ChatAssistant />
@@ -109,6 +110,7 @@ export default async function DashboardPage(props: { params: Promise<{ domain: s
               </CardContent>
             </Card>
           </div>
+        </>
       )}
     </div>
   )

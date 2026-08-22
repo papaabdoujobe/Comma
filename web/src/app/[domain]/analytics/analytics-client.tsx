@@ -76,7 +76,7 @@ export function AnalyticsClient({
         </div>
         
         <div className="flex items-center gap-4">
-          <Select value={selectedClientId} onValueChange={setSelectedClientId}>
+          <Select value={selectedClientId} onValueChange={(val) => setSelectedClientId(val || "")}>
             <SelectTrigger className="w-[180px] bg-white">
               <SelectValue placeholder="All Websites" />
             </SelectTrigger>
@@ -88,7 +88,7 @@ export function AnalyticsClient({
             </SelectContent>
           </Select>
 
-          <Select value={timeRange} onValueChange={setTimeRange}>
+          <Select value={timeRange} onValueChange={(val) => setTimeRange(val || "30d")}>
             <SelectTrigger className="w-[140px] bg-white">
               <SelectValue placeholder="Last 30 Days" />
             </SelectTrigger>

@@ -9,7 +9,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { Calendar as CalendarIcon, Clock, Share2, Plus, Image as ImageIcon, Video, Facebook, Twitter, Linkedin, Instagram, Activity, Users, Eye } from "lucide-react";
+import { Calendar as CalendarIcon, Clock, Share2, Plus, Image as ImageIcon, Video, Activity, Users, Eye } from "lucide-react";
+import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram } from "react-icons/fa";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
 export function SocialClient({ client }: { client: any }) {
@@ -109,10 +110,10 @@ export function SocialClient({ client }: { client: any }) {
 
   const getPlatformIcon = (platform: string) => {
     switch(platform) {
-      case 'facebook': return <Facebook className="h-4 w-4 text-blue-600" />;
-      case 'twitter': return <Twitter className="h-4 w-4 text-blue-400" />;
-      case 'linkedin': return <Linkedin className="h-4 w-4 text-blue-700" />;
-      case 'instagram': return <Instagram className="h-4 w-4 text-pink-600" />;
+      case 'facebook': return <FaFacebook className="h-4 w-4 text-blue-600" />;
+      case 'twitter': return <FaTwitter className="h-4 w-4 text-blue-400" />;
+      case 'linkedin': return <FaLinkedin className="h-4 w-4 text-blue-700" />;
+      case 'instagram': return <FaInstagram className="h-4 w-4 text-pink-600" />;
       default: return <Share2 className="h-4 w-4" />;
     }
   };
